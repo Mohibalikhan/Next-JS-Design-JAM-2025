@@ -1,53 +1,36 @@
-'use client'
+// pages/sale.tsx
+
+"use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaAngleRight, FaCaretDown, FaCaretUp } from "react-icons/fa";
 import Image from "next/image";
-import product1 from '../../components/assests/s1.png'
-import product2 from '../../components/assests/s2.png'
-import product3 from '../../components/assests/s3.png'
-import product4 from '../../components/assests/s4.png'
-import product5 from '../../components/assests/s5.png'
-import product6 from '../../components/assests/s6.png'
-import product7 from '../../components/assests/s7.png'
-import product8 from '../../components/assests/s8.png'
-import product9 from '../../components/assests/s9.png'
-import product10 from '../../components/assests/s10.png'
-import product11 from '../../components/assests/s11.png'
-import product12 from '../../components/assests/s12.png'
-import product13 from '../../components/assests/s13.png'
-import product14 from '../../components/assests/s14.png'
-import product15 from '../../components/assests/s15.png'
-import product16 from '../../components/assests/s16.png'
-import product17 from '../../components/assests/s17.png'
-import product18 from '../../components/assests/s18.png'
-import product19 from '../../components/assests/s19.png'
-import product20 from '../../components/assests/s20.png'
-import product21 from '../../components/assests/s21.png'
+import { client } from '../../sanity/lib/client'; // Import Sanity client
+import { productQuery } from '../../sanity/lib/queries'; // Import product query
 
-// Define the interface for the product
 interface Product {
-  id: number;
-  title: string;
+  productName: string;
   category: string;
   price: number;
+  inventory: number;
+  colors: string[];
+  status: string;
+  image: string | null; // Image can be a valid string (URL) or null
+  description: string;
 }
 
-const productImages = [product1, product2, product3, product4, product5, product6, product7, product8 ,product9 ,product10 ,product11 ,product12 ,product13 ,product14 ,product15 ,product16 ,product17 ,product18 ,product19 ,product20 ,product21];
-
 export default function Sale() {
-  // State for managing the sidebar toggle in mobile view
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
 
-  // State for product data, now typed using the Product interface
-  const [products, setProducts] = useState<Product[]>([]); // Specify type as Product[]
-
-  // Fetch product data on component mount
   useEffect(() => {
     const fetchData = async () => {
-      const fetchdata = await fetch("https://dummyjson.com/products");
-      const response = await fetchdata.json();
-      setProducts(response.products); // Set products data
+      try {
+        const data = await client.fetch(productQuery);
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products from Sanity:", error);
+      }
     };
 
     fetchData();
@@ -56,23 +39,15 @@ export default function Sale() {
   return (
     <div className="container mx-auto px-4 sm:px-6 md:px-8">
       <div className="flex flex-col lg:flex-row gap-10 mb-20">
-        {/* Sidebar Section */}
+        {/* Sidebar */}
         <div className="lg:w-[250px] w-full">
-          {/* Mobile toggle button */}
           <div className="flex justify-between items-center lg:hidden mt-6 mb-2">
             <h3 className="text-lg font-semibold">Categories</h3>
-            <button
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="text-xl"
-            >
+            <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="text-xl">
               {isSidebarOpen ? <FaCaretUp /> : <FaCaretDown />}
             </button>
           </div>
-
-          {/* Categories list */}
-          <ul
-            className={`flex flex-col gap-6 border-r border-gray-300 pt-10 pr-6 lg:block ${isSidebarOpen ? 'block' : 'hidden'} lg:flex`}
-          >
+          <ul className={`flex flex-col gap-6 border-r border-gray-300 pt-10 pr-6 lg:block ${isSidebarOpen ? 'block' : 'hidden'} lg:flex`}>
             {[
               "Women's Fashion",
               "Men's Fashion",
@@ -85,33 +60,41 @@ export default function Sale() {
               "Socks",
               "Accessories & Equipment"
             ].map((item, index) => (
-              <li
-                key={index}
-                className="flex justify-between items-center w-full cursor-pointer hover:text-gray-500"
-              >
-                <Link href="#" className="text-sm sm:text-base">
-                  {item}
-                </Link>
-                {index < 2 && (
-                  <FaAngleRight className="text-sm hidden lg:block mr-4" />
-                )}
+              <li key={index} className="flex justify-between items-center w-full cursor-pointer hover:text-gray-500">
+                <Link href="#" className="text-sm sm:text-base">{item}</Link>
+                {index < 2 && <FaAngleRight className="text-sm hidden lg:block mr-4" />}
               </li>
             ))}
           </ul>
         </div>
 
-        {/* Product Section */}
+        {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
           {products.length > 0 ? (
             products.map((item, index) => (
               <div key={index} className="font-bold text-slate-600">
-                <Link href={`/product/${item.id}`} className="block">
-                  {/* Using dynamic image URL */}
-                  <Image src={productImages[index % productImages.length]} alt={"shoes"} width={400} height={300} />
-                  
-                  <p className="mt-2">{item.title}</p>
-                  <p>{item.category}</p>
-                  <p>₹ {item.price}</p>
+                <Link href={`/product/${item.productName}`} className="block">
+                  <div className="w-full h-64 mb-4">
+                    {/* Only render Image if src is a valid string */}
+                    {item.image && item.image.trim() !== "" ? (
+                      <img
+                        src={item.image} // The image URL fetched from Sanity
+                        alt={item.productName}
+                        width={300}
+                        height={300}
+                        className="object-contain"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                        <span className="text-gray-500">No Image</span>
+                      </div> // Fallback if no image URL is provided
+                    )}
+                  </div>
+                  <p className="mt-2 text-lg font-semibold">{item.productName}</p>
+                  <p className="text-sm text-gray-500">{item.category}</p>
+                  <p className="font-bold">₹ {item.price}</p>
+                  <p className="text-xs text-gray-400">{item.status}</p>
+                  <p className="text-xs text-gray-500 mt-2">{item.description}</p>
                 </Link>
               </div>
             ))
