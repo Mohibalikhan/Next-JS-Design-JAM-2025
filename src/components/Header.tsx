@@ -3,6 +3,10 @@
 import React, { useState } from "react";
 import { AiOutlineSearch, AiOutlineHeart, AiOutlineShoppingCart } from "react-icons/ai";
 import Link from "next/link";
+import Image from 'next/image'; 
+import  Vector from '../../public/Vector.png';
+import NikeLogo from '../../public/NIKE.png'
+
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -10,15 +14,15 @@ const Header = () => {
   return (
     <div>
       {/* First Header (Top Links) */}
-      <header className="text-gray-600 body-font bg-gray-100 shadow-md">
+      <header className="text-gray-600 body-font bg-gray-200 shadow-md">
         <div className="container mx-auto flex justify-between items-center px-4 sm:px-6 md:px-8">
           <h1 className="sm:text-2xl text-xl mt-2 font-bold text-gray-900 mb-4 md:mb-0">
-            <img src="Vector.png" alt="Logo" className="h-6 w-auto" />
+            <Image src={Vector} alt="Logo" className="h-6 w-auto" width={25} height={25} />
           </h1>
           
-          <div className='flex items-center justify-end gap-4 text-[#0c0303] font-semibold'>
-            <nav className="text-sm md:text-base">
-              <Link href={'./store'}>Find a Store | </Link>
+          <div className='flex items-center justify-end gap-4 text-[#0c0303] '>
+            <nav className="text-sm md:text-base ">
+              <Link href={'./store'}>Find a Store  | </Link>
               <Link href={'./help'}>Help | </Link>
               <Link href={'./join'}>Join Us | </Link>
               <Link href={'/login'}>Sign In </Link>
@@ -31,7 +35,7 @@ const Header = () => {
       <header className="text-black text-sm body-font bg-white shadow-md">
         <div className="container mx-auto flex p-3 justify-between items-center px-4 sm:px-6 md:px-8">
           <h1 className="sm:text-2xl text-xl mt-2 font-bold text-gray-900 mb-4 md:mb-0">
-            <img src="NIKE.png" alt="Logo" className="h-7 w-auto" />
+            <Image src={NikeLogo} alt="Logo" className="h-7 w-auto" width={50} height={20} />
           </h1>
 
           {/* Desktop Navigation Links */}

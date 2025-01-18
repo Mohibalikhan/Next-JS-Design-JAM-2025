@@ -1,5 +1,6 @@
 import React from "react";
 
+
 export default function SignIn() {
   return (
     <div className="flex mt-10 justify-center mb-10 bg-[#FFFFFF]">
@@ -8,7 +9,7 @@ export default function SignIn() {
           <img
             src="NIKE.png" 
             alt="Nike Logo"
-            className="mx-auto w-15 h-8"
+            className="mx-auto w-17 h-6 "
           />
         </div>
         <h1 className="mt-4 text-[18px] font-bold text-center text-[#111111]">

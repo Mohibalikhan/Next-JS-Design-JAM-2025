@@ -5,7 +5,7 @@ export default function Hero() {
     return (
         
         <div>
-        <div className='text-center bg-gray-100 py-2 '>
+        <div className='text-center bg-gray-200 py-2 '>
             <p className='text-lg'>Hello Nike App</p>
             <p className='text-gray-600 text-[11px]'>Download the app to access everything Nike. <span className='text-black underline cursor-pointer'>Get Your Great</span> </p>
         </div>
