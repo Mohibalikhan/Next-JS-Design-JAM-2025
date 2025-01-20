@@ -45,7 +45,7 @@ const Header = () => {
             <Link href={'/about'} className="mr-5 hover:text-gray-900">Women</Link>
             <Link href={'/kids'} className="mr-5 hover:text-gray-900">Kids</Link>
             <Link href={'/sale'} className="mr-5 hover:text-gray-900">Sale</Link>
-            <Link href={'./productdetail'} className="mr-5 hover:text-gray-900">SNKRS</Link>
+            <Link href={'./snkrs'} className="mr-5 hover:text-gray-900">SNKRS</Link>
           </nav>
 
           {/* Search Bar, Wishlist Icon, Cart Icon, Hamburger Menu for Mobile */}
@@ -104,7 +104,7 @@ const Header = () => {
             <Link href={"/about"} className="hover:text-gray-900">Women</Link>
             <Link href={"/kids"} className="hover:text-gray-900">Kids</Link>
             <Link href={'/sale'} className=" hover:text-gray-900">Sale</Link>
-            <Link href={'./productdetail'} className=" hover:text-gray-900">SNKRS</Link>
+            <Link href={'./snkrs'} className=" hover:text-gray-900">SNKRS</Link>
             
             <button
               className="mt-4 text-gray-600"
