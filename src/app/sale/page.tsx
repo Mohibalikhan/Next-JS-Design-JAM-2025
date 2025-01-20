@@ -1,105 +1,165 @@
-// pages/sale.tsx
-
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaAngleRight, FaCaretDown, FaCaretUp } from "react-icons/fa";
-import Image from "next/image";
-import { client } from '../../sanity/lib/client'; // Import Sanity client
-import { productQuery } from '../../sanity/lib/queries'; // Import product query
+import Client from "../../sanity/lib/client";
+import { urlFor } from "@/sanity/lib/image";
 
 interface Product {
+  _id: string;
   productName: string;
   category: string;
   price: number;
-  inventory: number;
-  colors: string[];
-  status: string;
-  image: string | null; // Image can be a valid string (URL) or null
-  description: string;
+  image: string;
 }
 
 export default function Sale() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [minPrice, setMinPrice] = useState<number>(0);
+  const [maxPrice, setMaxPrice] = useState<number>(10000);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await client.fetch(productQuery);
+        const query = `*[_type == "product"] {
+          _id,
+          productName,
+          category,
+          price,
+          "image": image.asset->url
+        }`;
+        const data = await Client.fetch(query);
+        
         setProducts(data);
+
+        const uniqueCategories = [
+          ...new Set(data.map((product: Product) => product.category))
+        ];
+
+        setCategories(uniqueCategories as string[]);
+        setFilteredProducts(data); // Set initial filtered products
       } catch (error) {
-        console.error("Error fetching products from Sanity:", error);
+        console.error('Error fetching products:', error);
       }
     };
 
     fetchData();
   }, []);
 
+  // Filter products based on selected category and price range
+  useEffect(() => {
+    const filterProducts = () => {
+      const filtered = products.filter((product) => {
+        const isCategoryMatch = selectedCategory ? product.category === selectedCategory : true;
+        const isPriceMatch = product.price >= minPrice && product.price <= maxPrice;
+        return isCategoryMatch && isPriceMatch;
+      });
+      setFilteredProducts(filtered);
+    };
+
+    filterProducts();
+  }, [selectedCategory, minPrice, maxPrice, products]);
+
+  // Clear filters
+  const clearFilters = () => {
+    setSelectedCategory('');
+    setMinPrice(0);
+    setMaxPrice(10000);
+  };
+
   return (
     <div className="container mx-auto px-4 sm:px-6 md:px-8">
       <div className="flex flex-col lg:flex-row gap-10 mb-20">
-        {/* Sidebar */}
+        {/* Sidebar Section */}
         <div className="lg:w-[250px] w-full">
+          {/* Mobile toggle button */}
           <div className="flex justify-between items-center lg:hidden mt-6 mb-2">
-            <h3 className="text-lg font-semibold">Categories</h3>
-            <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="text-xl">
+            <h3 className="text-lg font-semibold ">Categories</h3>
+            <button
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="text-xl"
+            >
               {isSidebarOpen ? <FaCaretUp /> : <FaCaretDown />}
             </button>
           </div>
-          <ul className={`flex flex-col gap-6 border-r border-gray-300 pt-10 pr-6 lg:block ${isSidebarOpen ? 'block' : 'hidden'} lg:flex`}>
-            {[
-              "Women's Fashion",
-              "Men's Fashion",
-              "Hoodies & Sweatshirts",
-              "Tops & T-shirts",
-              "Shorts",
-              "Sports & Outdoor",
-              "Trackcuits",
-              "Jumpsuits & Rompers",
-              "Socks",
-              "Accessories & Equipment"
-            ].map((item, index) => (
-              <li key={index} className="flex justify-between items-center w-full cursor-pointer hover:text-gray-500">
-                <Link href="#" className="text-sm sm:text-base">{item}</Link>
-                {index < 2 && <FaAngleRight className="text-sm hidden lg:block mr-4" />}
+
+          {/* Categories list */}
+          <ul
+            className={`flex flex-col gap-6 border-r border-gray-300 pt-10 pr-6 lg:block ${isSidebarOpen ? 'block' : 'hidden'} lg:flex`}
+          >
+            {categories.map((category, index) => (
+              <li
+                key={index}
+                className="flex justify-between items-center w-full cursor-pointer hover:text-gray-500"
+              >
+                <button
+                  onClick={() => setSelectedCategory(category)}
+                  className={`text-sm sm:text-base ${selectedCategory === category ? 'text-blue-600' : ''}`}
+                >
+                  {category}
+                </button>
+                <FaAngleRight className="text-sm hidden lg:block mr-4" />
               </li>
             ))}
           </ul>
+
+          {/* Price Range Filter */}
+          <div className="mt-10">
+            <h3 className="text-lg font-semibold">Price Range</h3>
+            <div className="flex flex-col gap-2">
+              <input
+                type="number"
+                value={minPrice}
+                onChange={(e) => setMinPrice(Number(e.target.value))}
+                className="border p-2 rounded-md"
+                placeholder="Min Price"
+              />
+              <input
+                type="number"
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(Number(e.target.value))}
+                className="border p-2 rounded-md"
+                placeholder="Max Price"
+              />
+            </div>
+          </div>
+
+          {/* Clear Filters Button */}
+          <div className="mt-6">
+            <button 
+              onClick={clearFilters} 
+              className="bg-red-500 text-white px-4 py-2 rounded-md"
+            >
+              Clear Filters
+            </button>
+          </div>
         </div>
 
-        {/* Product Grid */}
+        {/* Product Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
-          {products.length > 0 ? (
-            products.map((item, index) => (
-              <div key={index} className="font-bold text-slate-600">
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((item) => (
+              <div key={item._id} className="font-bold text-slate-600">
                 <Link href={`/product/${item.productName}`} className="block">
-                  <div className="w-full h-64 mb-4">
-                    {/* Only render Image if src is a valid string */}
-                    {item.image && item.image.trim() !== "" ? (
-                      <img
-                        src={item.image} // The image URL fetched from Sanity
-                        alt={item.productName}
-                        width={300}
-                        height={300}
-                        className="object-contain"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                        <span className="text-gray-500">No Image</span>
-                      </div> // Fallback if no image URL is provided
-                    )}
-                  </div>
-                  <p className="mt-2 text-lg font-semibold">{item.productName}</p>
-                  <p className="text-sm text-gray-500">{item.category}</p>
-                  <p className="font-bold">₹ {item.price}</p>
-                  <p className="text-xs text-gray-400">{item.status}</p>
-                  <p className="text-xs text-gray-500 mt-2">{item.description}</p>
+                  <img
+                    src={urlFor(item.image).url()} // Use urlFor to generate correct image URL
+                    alt={item.productName}
+                    width={400}
+                    height={300}
+                    className="rounded-md object-cover"
+                  />
+                  <p className="mt-2">{item.productName}</p>
+                  <p>{item.category}</p>
+                  <p>₹ {item.price}</p>
                 </Link>
               </div>
             ))
           ) : (
-            <p>Loading products...</p>
+            <p>No products found with the selected filters.</p>
           )}
         </div>
       </div>
