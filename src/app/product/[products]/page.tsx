@@ -27,11 +27,12 @@ const Page = () => {
     const fetchData = async () => {
       try {
         const query = `*[_type == "product" && productName == $name][0] {
-          _id,
           productName,
           description,
           category,
-          brand,
+          inventory,
+          status,
+          colors,
           price,
           "image": image.asset->url
         }`;
@@ -92,8 +93,27 @@ const Page = () => {
             <span className="font-bold">Category:</span> {product?.category}
           </p>
           <p className="text-gray-500">
-            <span className="font-bold">Brand:</span> {product?.brand}
+            <span className="font-bold">Inventory:</span> {product?.inventory}
           </p>
+          <p className="text-gray-500">
+            <span className="font-bold">Status</span> {product?.status}
+          </p>
+          <p className="text-sm font-semibold">Available Colors:</p>
+          <div className="flex gap-2">
+            {product?.colors?.map((color: string, index: number) => (
+              <div
+                key={index}
+                className="w-8 h-8 rounded-full"
+                style={{ backgroundColor: color ,
+                    border: color === "white" ? "2px solid black" : "2px solid #ccc",
+                    boxShadow: color === "white" ? "0 0 8px rgba(0, 0, 0, 0.5)" : "0 0 4px rgba(0, 0, 0, 0.2)",
+                  
+                }}
+              ></div>
+            ))}
+          </div>
+                  
+        
 
           <button
             onClick={() => handleAddToCart(product)}

@@ -45,33 +45,42 @@ export default function Hero() {
 </div>
 <div>
 
-<div className="container px-4 py-8">
+<div className="container max-w-[1200px] px-4 py-8 mx-auto">
   <p className="text-[23px] font-bold px-10 lg:px-12 mb-5 mt-10">Best of Air Max</p>
   <div className="flex flex-col lg:flex-row justify-center items-center gap-4 lg:gap-10">
     <div className="font-bold text-slate-600 text-center lg:text-left">
+      <Link href={"/sale"}>
       <Image src={"/h1.png"} alt={"shoes"} width={400} height={300} />
       <p className="mt-2">Nike Air Max Plus</p>
       <p className="text-sm">Women's shoes</p>
       <p className="text-lg">₹ 13 995</p>
+      </Link>
     </div>
+
     <div className="font-bold text-slate-600 text-center lg:text-left">
+      <Link href={"/sale"}>
       <Image src={"/h2.png"} alt={"shoes"} width={400} height={300} />
       <p className="mt-2">Nike Air Max Plus</p>
       <p className="text-sm">Men's shoes</p>
       <p className="text-lg">₹ 13 995</p>
+      </Link>
     </div>
-    <div className="font-bold text-slate-600 text-center lg:text-left">
+  
+      <div className="font-bold text-slate-600 text-center lg:text-left">
+      <Link href={"/sale"}>
       <Image src={"/h3.png"} alt={"shoes"} width={400} height={300} />
       <p className="mt-2">Nike Air Max 97 SE</p>
       <p className="text-sm">Men's shoes</p>
       <p className="text-lg">₹ 13 995</p>
+      </Link>
     </div>
   </div>
 </div>
 
 
     <div>
-   <span className='text-[23px] font-bold px-10 lg:px-16 mb-8'>Featured</span>
+    
+   <span className='text-[23px] font-bold px-10 lg:px-16 mt-10 mb-8'>Featured</span>
    <div className='flex justify-center px-10'>
     <Image
     className=''
@@ -101,7 +110,7 @@ export default function Hero() {
 </div>
     </div>
             </div>
-            <div className="container p-10">
+            <div className="container max-w-[1200px] px-4 py-8 mx-auto">
   <p className="text-xl font-semibold px-10 lg:px-6 uppercase text-start mb-8">Gear Up</p>
   <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 lg:gap-8">
     <div className="font-sm  text-slate-600 text-center">
@@ -132,7 +141,7 @@ export default function Hero() {
 
 
 
-                            <div className='mt-28 mb-7'>
+      <div className='mt-28 mb-7'>
                 <span className='text-xl font-semibold px-10 lg:px-16'>{`Don't`} Miss</span>
             </div>
 

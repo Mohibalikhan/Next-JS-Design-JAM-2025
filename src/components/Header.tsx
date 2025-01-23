@@ -41,8 +41,8 @@ const Header = () => {
           {/* Desktop Navigation Links */}
           <nav className="md:ml-auto md:mr-auto flex-wrap items-center text-base justify-center space-x-6 hidden md:flex font-bold">
             <Link href={'/'} className="mr-2 hover:text-gray-900">New & Featured</Link>
-            <Link href={'./cart'} className="mr-5 hover:text-gray-900">Men</Link>
-            <Link href={'/about'} className="mr-5 hover:text-gray-900">Women</Link>
+            <Link href={'./sale'} className="mr-5 hover:text-gray-900">Men</Link>
+            <Link href={'/sale'} className="mr-5 hover:text-gray-900">Women</Link>
             <Link href={'/kids'} className="mr-5 hover:text-gray-900">Kids</Link>
             <Link href={'/sale'} className="mr-5 hover:text-gray-900">Sale</Link>
             <Link href={'./snkrs'} className="mr-5 hover:text-gray-900">SNKRS</Link>
@@ -100,8 +100,8 @@ const Header = () => {
         {menuOpen && (
           <nav className="md:hidden flex flex-col items-center bg-gray-50 p-4 space-y-4">
             <Link href={"/"} className="hover:text-gray-900">New & Featured</Link>
-            <Link href={"./cart"} className="hover:text-gray-900">Men</Link>
-            <Link href={"/about"} className="hover:text-gray-900">Women</Link>
+            <Link href={"/sale"} className="hover:text-gray-900">Men</Link>
+            <Link href={"/sale"} className="hover:text-gray-900">Women</Link>
             <Link href={"/kids"} className="hover:text-gray-900">Kids</Link>
             <Link href={'/sale'} className=" hover:text-gray-900">Sale</Link>
             <Link href={'./snkrs'} className=" hover:text-gray-900">SNKRS</Link>
