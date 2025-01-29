@@ -48,7 +48,7 @@ export default function Hero() {
 <div className="container max-w-[1200px] px-4 py-8 mx-auto">
   <p className="text-[23px] font-bold px-10 lg:px-12 mb-5 mt-10">Best of Air Max</p>
   <div className="flex flex-col lg:flex-row justify-center items-center gap-4 lg:gap-10">
-    <div className="font-bold text-slate-600 text-center lg:text-left">
+    <div className="font-bold hover:scale-105 duration-300 text-slate-600 text-center lg:text-left">
       <Link href={"/sale"}>
       <Image src={"/h1.png"} alt={"shoes"} width={400} height={300} />
       <p className="mt-2">Nike Air Max Plus</p>
@@ -57,7 +57,7 @@ export default function Hero() {
       </Link>
     </div>
 
-    <div className="font-bold text-slate-600 text-center lg:text-left">
+    <div className="font-bold hover:scale-105 duration-300 text-slate-600 text-center lg:text-left">
       <Link href={"/sale"}>
       <Image src={"/h2.png"} alt={"shoes"} width={400} height={300} />
       <p className="mt-2">Nike Air Max Plus</p>
@@ -66,21 +66,20 @@ export default function Hero() {
       </Link>
     </div>
   
-      <div className="font-bold text-slate-600 text-center lg:text-left">
+      <div className="font-bold hover:scale-105 duration-300 text-slate-600 text-center lg:text-left">
       <Link href={"/sale"}>
       <Image src={"/h3.png"} alt={"shoes"} width={400} height={300} />
       <p className="mt-2">Nike Air Max 97 SE</p>
       <p className="text-sm">Men's shoes</p>
-      <p className="text-lg">₹ 13 995</p>
+      <p className="text-lg">₹ 15 995</p>
       </Link>
     </div>
   </div>
 </div>
 
 
-    <div>
-    
-   <span className='text-[23px] font-bold px-10 lg:px-16 mt-10 mb-8'>Featured</span>
+    <div  className="container max-w-[1300px]  py-8 mx-auto">
+   <span className='text-[23px] font-bold px-10 lg:px-15 mt-10 mb-8'>Featured</span>
    <div className='flex justify-center px-10'>
     <Image
     className=''
@@ -113,35 +112,44 @@ export default function Hero() {
             <div className="container max-w-[1200px] px-4 py-8 mx-auto">
   <p className="text-xl font-semibold px-10 lg:px-6 uppercase text-start mb-8">Gear Up</p>
   <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 lg:gap-8">
-    <div className="font-sm  text-slate-600 text-center">
+
+    <div className="font-bold hover:scale-105 duration-300 text-slate-600 text-center">
+    <Link href={"/sale"}>
       <Image src={"/g1.png"} alt={"shirt"} width={300} height={200} />
       <p className="mt-2">Nike Dri-FIT ADV TechKnit Ultra</p>
       <p className="text-sm">Men's Short Sleeve</p>
       <p className="text-lg">₹ 3895</p>
+    </Link>
     </div>
-    <div className="font-bold text-slate-600 text-center">
+    <div className="font-bold hover:scale-105 duration-300 text-slate-600 text-center">
+    <Link href={"/sale"}>
       <Image src={"/g2.png"} alt={"shirt"} width={300} height={200} />
       <p className="mt-2">Nike Dri-FIT Challenger</p>
       <p className="text-sm">Men's 18cm approx</p>
       <p className="text-lg">₹ 2495</p>
+      </Link>
     </div>
-    <div className="font-bold text-slate-600 text-center">
+    <div className="font-bold hover:scale-105 duration-300 text-slate-600 text-center">
+    <Link href={"/sale"}>
       <Image src={"/g3.png"} alt={"shirt"} width={300} height={200} />
       <p className="mt-2">Nike Dri-FIT ADV Run Division</p>
       <p className="text-sm">Women's Long Sleeve</p>
       <p className="text-lg">₹ 5295</p>
+      </Link>
     </div>
-    <div className="font-bold text-slate-600 text-center">
+    <div className="font-bold hover:scale-105 duration-300 text-slate-600 text-center">
+    <Link href={"/sale"}>
       <Image src={"/g4.png"} alt={"leggings"} width={300} height={200} />
       <p className="mt-2">Women's Running Leggings with Pockets</p>
       <p className="text-lg">₹ 3795</p>
+      </Link>
     </div>
   </div>
 </div>
 
 
 
-      <div className='mt-28 mb-7'>
+      <div className='container max-w-[1200px] px-4 py-8 mx-auto'>
                 <span className='text-xl font-semibold px-10 lg:px-16'>{`Don't`} Miss</span>
             </div>
 
@@ -162,42 +170,50 @@ export default function Hero() {
                 <span>Your built-to-last, all-week wears—but with style only Jordan Brand can deliver.</span><br />
 
                 <button className="bg-black text-white my-5 px-6 py-2 text-sm md:text-base rounded-full hover:bg-gray-800">
+                <Link href={"/sale"}>
                     Shop
+                    </Link>
                 </button>
                 
 
             
             </div>
-            <div className="contanier">
-            <div className='mt-28 mb-0'>
+            <div className="container max-w-[1200px] px-4 py-8 mx-auto">
+            <div className='mt-10 mb-0'>
         <span className='text-xl font-semibold px-10 lg:px-16'>The Essentials</span>
         </div>
         <div className='flex justify-center items-center mb-16 md:mb-28 flex-wrap'>
         
         <div className='w-96 h-[400px] px-2 overflow-hidden'>
+        <Link href={"/unicollection"}>
             <Image
             className='hover:scale-105 duration-300'
                src={'/l1.png'}
                alt=''
                width={300}
                height={200}/>
+               </Link>
             </div>
       <div className='w-96 h-[400px] px-2 overflow-hidden my-7 md:my0 '>
+      <Link href={"/unicollection"}>
             <Image
             className='hover:scale-105 duration-300'
                src={'/l2.png'}
                alt=''
                width={300}
                height={500}/>
+               </Link>
             </div>
 
 <div className='w-96 h-[400px]  px-2 overflow-hidden mb-14 md:mb-0'>
+            <Link href={"/kids"}>
             <Image
             className='hover:scale-105 duration-300'
                src={'/l3.png'}
                alt=''
                width={300}
                height={500}/>
+               </Link>
             </div>
         </div>
         </div>
@@ -205,7 +221,7 @@ export default function Hero() {
 
 <div className="bg-white text-black">
       {/* Footer Content */}
-      <div className="flex flex-col lg:flex-row justify-between px-6 lg:px-25 py-8 lg:py-16 gap-10">
+      <div className="flex flex-col lg:flex-row justify-between px-6 lg:px-25 py-8 lg:py-12 gap-10">
         {/* icons Section */}
         <div className="flex flex-col gap-3">
           <h3 className=" lg:text-xl font-bold">Icons</h3>
