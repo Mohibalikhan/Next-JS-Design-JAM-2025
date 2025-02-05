@@ -1,10 +1,11 @@
-"use client"
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+"use client";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { useUser } from "@/hooks/useUser"; // Assuming this is where user info comes from
 
 interface Product {
   productName: string;
   price: number;
-  image: string;
+  image?: string;
   quantity: number;
 }
 
@@ -21,17 +22,32 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-  const [cart, setCart] = useState<Product[]>(() => {
-    if (typeof window !== "undefined") {
-      const savedCart = localStorage.getItem("cart");
-      return savedCart ? JSON.parse(savedCart) : [];
-    }
-    return [];
-  });
+  const { user } = useUser();  // Access logged-in user's info (ensure user is loaded)
+  const [cart, setCart] = useState<Product[]>([]);
 
+  // Check if user has an 'id' property
+  const userId = user && 'id' in user ? (user as { id: string }).id : undefined;
+
+  // Load the cart from localStorage for the logged-in user (if available)
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
+    if (typeof window !== "undefined" && userId) {
+      try {
+        const savedCart = localStorage.getItem(`cart_${userId}`);
+        if (savedCart) {
+          setCart(JSON.parse(savedCart));
+        }
+      } catch (error) {
+        console.error("Error loading cart from local storage:", error);
+      }
+    }
+  }, [userId]); // Trigger cart load when user changes
+
+  // Save the cart to localStorage for the logged-in user
+  useEffect(() => {
+    if (typeof window !== "undefined" && userId) {
+      localStorage.setItem(`cart_${userId}`, JSON.stringify(cart));
+    }
+  }, [cart, userId]); // Update localStorage whenever cart or user changes
 
   const addToCart = (product: Product) => {
     setCart((prevCart) => {
@@ -43,7 +59,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             : item
         );
       }
-      return [...prevCart, { ...product, quantity: 1, image: product.image || "" }];
+      return [...prevCart, { ...product, quantity: 1 }];
     });
   };
 

@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { CartProvider } from "./Context/CartContext";
+import SessionWrapper from "../components/SessionWrapper";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,6 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <SessionWrapper>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -37,6 +39,7 @@ export default function RootLayout({
         <Footer/>
         </CartProvider>
       </body>
+      </SessionWrapper>
     </html>
   );
 }

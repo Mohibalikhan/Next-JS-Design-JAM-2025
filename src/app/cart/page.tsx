@@ -1,10 +1,14 @@
 "use client";
 import { useCart } from "../Context/CartContext"; // Import useCart hook
 import Link from "next/link";
-
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const CartPage = () => {
   const { cart, removeFromCart, incrementQuantity, decrementQuantity } = useCart();
+
+  const { data: session } = useSession(); // Get session data
+  const router = useRouter();
 
   const handleRemove = (productName: string) => {
     removeFromCart(productName);
@@ -12,6 +16,14 @@ const CartPage = () => {
 
   const getTotalPrice = () => {
     return cart.reduce((total, product) => total + product.price * product.quantity, 0);
+  };
+
+  const handleCheckout = () => {
+    if (!session) {
+      router.push("/login"); // Redirect to login page
+    } else {
+      router.push("/checkout"); // Proceed to checkout page
+    }
   };
 
   return (
@@ -85,11 +97,13 @@ const CartPage = () => {
             <p className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4 sm:mb-0">
               Total: ₹{getTotalPrice()}
             </p>
-            <Link href="/checkout">
-              <button className="bg-black text-white py-2 px-6 sm:py-3 sm:px-8 rounded-lg shadow-lg hover:bg-gray-800 transition-all duration-200 ease-in-out">
+            
+              <button 
+              onClick={handleCheckout}
+              className="bg-black text-white py-2 px-6 sm:py-3 sm:px-8 rounded-lg shadow-lg hover:bg-gray-800 transition-all duration-200 ease-in-out">
                 Checkout
               </button>
-            </Link>
+            
           </div>
         </div>
       )}

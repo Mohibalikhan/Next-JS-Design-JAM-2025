@@ -1,16 +1,68 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useCart } from "../app/Context/CartContext";
-import { AiOutlineSearch, AiOutlineHeart, AiOutlineShoppingCart } from "react-icons/ai";
+import { AiOutlineSearch, AiOutlineHeart, AiOutlineShoppingCart, AiOutlineClose } from "react-icons/ai";
 import Link from "next/link";
 import Image from 'next/image';
+import { signOut, useSession } from "next-auth/react";
 import Vector from '../../public/Vector.png';
 import NikeLogo from '../../public/NIKE.png';
 
+// Mock API to fetch categories
+const fetchCategories = async () => {
+  return ["unicollection", "Kids", "Sale", "Snkrs"];
+};
 
 const Header = () => {
   const { getTotalItems } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { data: session } = useSession();
+  
+  // Search functionality
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredCategories, setFilteredCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const searchRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      const categoriesData = await fetchCategories();
+      setCategories(categoriesData);
+    };
+    loadCategories();
+  }, []);
+
+  useEffect(() => {
+    if (searchTerm === "") {
+      setFilteredCategories([]);
+    } else {
+      const filtered = categories.filter(category =>
+        category.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredCategories(filtered);
+    }
+  }, [searchTerm, categories]);
+
+  // Close search dropdown if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setSearchTerm("");
+        setFilteredCategories([]);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const getCategoryUrl = (category: string) => {
+    const categoryName = category.toLowerCase().replace(" ", "-");
+    return `/${categoryName}`;
+  };
 
   return (
     <div>
@@ -25,8 +77,7 @@ const Header = () => {
             <nav className="text-sm md:text-base ">
               <Link href={'./store'}>Find a Store  | </Link>
               <Link href={'./help'}>Help | </Link>
-              <Link href={'./join'}>Join Us | </Link>
-              <Link href={'/login'}>Sign In </Link>
+              <Link href={'./join'}>Join Us </Link>
             </nav>
           </div>
         </div>
@@ -49,19 +100,33 @@ const Header = () => {
             <Link href={'./snkrs'} className="mr-5 hover:text-gray-900">SNKRS</Link>
           </nav>
 
-          {/* Search Bar, Wishlist Icon, Cart Icon, Hamburger Menu for Mobile */}
+          {/* Search Bar, Wishlist Icon, Cart Icon, Hamburger Menu for Mobile, User Profile */}
           <div className="flex items-center gap-4">
             {/* Search Bar */}
-            <div className="relative hidden md:block">
+            <div className="relative hidden md:block" ref={searchRef}>
               <input
                 type="text"
                 placeholder="Search..."
                 className="bg-gray-100 rounded-lg px-4 py-2 w-48 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
               <AiOutlineSearch
                 className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500"
                 size={20}
               />
+              {/* Dropdown of Categories */}
+              {searchTerm && (
+                <div className="absolute top-full left-0 right-0 bg-white shadow-lg max-h-60 overflow-y-auto z-10">
+                  {filteredCategories.map((category, index) => (
+                    <Link key={index} href={getCategoryUrl(category)}>
+                      <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                        {category}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Wishlist Icon */}
@@ -81,7 +146,23 @@ const Header = () => {
               )}
             </div>
 
-            {/* Hamburger Menu Icon for Mobile */}
+            {/* User Profile */}
+            {session ? (
+              <div className="relative flex items-center gap-2">
+                <img
+                  src={session.user?.image??"default-profile.png"}
+                  alt="User Profile"
+                  className="w-10 h-10 rounded-full border-2 border-gray-200 cursor-pointer"
+                />
+                <button onClick={() => signOut()} className="text-red-500">Sign Out</button>
+              </div>
+            ) : (
+              <Link href="/login">
+                <button className="text-blue-500">Sign In</button>
+              </Link>
+            )}
+
+            {/* Mobile Menu Button */}
             <button
               className="text-gray-600 md:hidden flex items-center"
               onClick={() => setMenuOpen(!menuOpen)}
@@ -93,11 +174,11 @@ const Header = () => {
                 stroke="currentColor"
                 className="w-6 h-6"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16" 
+                <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={2} 
+                d="M4 6h16M4 12h16M4 18h16" 
                 />
               </svg>
             </button>
@@ -114,11 +195,12 @@ const Header = () => {
             <Link href={'/sale'} className="hover:text-gray-900">Sale</Link>
             <Link href={'./snkrs'} className="hover:text-gray-900">SNKRS</Link>
 
-            <button
-              className="mt-4 text-gray-600"
-              onClick={() => setMenuOpen(false)}
+            {/* Close Menu Icon */}
+            <button 
+            className="mt-4 text-gray-600" 
+            onClick={() => setMenuOpen(false)}
             >
-              Close Menu
+
             </button>
           </nav>
         )}
