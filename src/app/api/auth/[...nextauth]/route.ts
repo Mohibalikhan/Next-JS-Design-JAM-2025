@@ -1,4 +1,4 @@
-// src/app/api/auth/[...nextauth]/route.js
+// src/app/api/auth/[...nextauth]/route.ts
 import NextAuth, { NextAuthOptions } from "next-auth";
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
@@ -31,7 +31,7 @@ const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id as string;
+        
         session.user.name = token.name as string;
         session.user.email = token.email as string;
         session.user.image = token.picture as string;
@@ -43,19 +43,19 @@ const authOptions: NextAuthOptions = {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
           sameSite: "strict",
-          expires: new Date(Date.now() + 60 * 60 * 1000),
+          expires: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
         });
       }
       return session;
     },
   },
   pages: {
-    signIn: "/login",
-    error: "/auth/error",
+    signIn: "/login", // Custom sign-in page
+    error: "/auth/error", // Custom error page
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET, // Secret key for JWT
   session: {
-    strategy: "jwt",
+    strategy: "jwt", // Use JWT for session management
   },
 };
 
