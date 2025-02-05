@@ -1,6 +1,10 @@
-const nextConfig = {
-   
-  };
+
+  export default tseslint.config({
+    rules: {
+      "@typescript-eslint/no-explicit-any": "error"
+    }
+  });
   
-  module.exports = nextConfig;
+  
+
   
