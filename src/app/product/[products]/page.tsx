@@ -4,15 +4,28 @@ import { useCart } from "../../Context/CartContext";
 import Client from "../../../sanity/lib/client";
 import { useParams } from "next/navigation";
 
+// Define Product Type
+interface Product {
+  productName: string;
+  description: string;
+  category: string;
+  inventory: number;
+  status: string;
+  colors: string[];
+  price: number;
+  image?: string;
+  quantity: number; // Added quantity property
+}
+
 const Page = () => {
   const { addToCart } = useCart();
-  const params = useParams(); // Get params as a promise
-  const [product, setProduct] = useState<any>(null);
+  const params = useParams(); // Get params as an object
+  const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string>("");
 
-  // Safely extract productName and handle its type
+  // Extract and decode productName safely
   const productName =
     typeof params.products === "string" ? decodeURIComponent(params.products) : "";
 
@@ -35,11 +48,12 @@ const Page = () => {
           price,
           "image": image.asset->url
         }`;
-        const data = await Client.fetch(query, { name: productName });
+        const data: Omit<Product, "quantity"> | null = await Client.fetch(query, { name: productName });
+
         if (!data) {
           setError("Product not found.");
         } else {
-          setProduct(data);
+          setProduct({ ...data, quantity: 1 }); // Ensure quantity is initialized
         }
       } catch (err) {
         console.error("Error fetching product:", err);
@@ -52,7 +66,7 @@ const Page = () => {
     fetchData();
   }, [productName]);
 
-  const handleAddToCart = (product: any) => {
+  const handleAddToCart = (product: Product) => {
     addToCart(product);
     setSuccessMessage("Product added successfully!");
     setTimeout(() => {
@@ -95,27 +109,28 @@ const Page = () => {
             <span className="font-bold">Inventory:</span> {product?.inventory}
           </p>
           <p className="text-gray-500">
-            <span className="font-bold">Status</span> {product?.status}
+            <span className="font-bold">Status:</span> {product?.status}
           </p>
           <p className="text-sm font-semibold">Available Colors:</p>
           <div className="flex gap-2">
-            {product?.colors?.map((color: string, index: number) => (
+            {product?.colors?.map((color, index) => (
               <div
                 key={index}
                 className="w-8 h-8 rounded-full"
-                style={{ backgroundColor: color ,
-                    border: color === "white" ? "2px solid black" : "2px solid #ccc",
-                    boxShadow: color === "white" ? "0 0 8px rgba(0, 0, 0, 0.5)" : "0 0 4px rgba(0, 0, 0, 0.2)",
-                  
+                style={{
+                  backgroundColor: color,
+                  border: color === "white" ? "2px solid black" : "2px solid #ccc",
+                  boxShadow:
+                    color === "white"
+                      ? "0 0 8px rgba(0, 0, 0, 0.5)"
+                      : "0 0 4px rgba(0, 0, 0, 0.2)",
                 }}
               ></div>
             ))}
           </div>
-                  
-        
 
           <button
-            onClick={() => handleAddToCart(product)}
+            onClick={() => product && handleAddToCart(product)}
             className="bg-black text-white py-3 px-6 rounded-lg hover:bg-gray-800 transition-all"
           >
             Add to Cart
