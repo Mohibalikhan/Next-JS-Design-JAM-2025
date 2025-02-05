@@ -31,7 +31,7 @@ const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       if (session.user) {
-        
+        session.user.id = token.id as string;
         session.user.name = token.name as string;
         session.user.email = token.email as string;
         session.user.image = token.picture as string;
@@ -61,7 +61,7 @@ const authOptions: NextAuthOptions = {
 
 // Create a helper function to handle the request
 const authHandler = (req: NextRequest, res: NextResponse) => {
-  return NextAuth(req as any, res as any, authOptions); // cast as any to bypass type mismatch
+  return NextAuth (req, res, authOptions); // No casting to `any` needed
 };
 
 // The GET and POST functions for handling API routes in Next.js 13+
