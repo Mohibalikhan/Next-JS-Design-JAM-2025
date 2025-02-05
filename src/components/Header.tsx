@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { useCart } from "../app/Context/CartContext";
-import { AiOutlineSearch, AiOutlineHeart, AiOutlineShoppingCart, AiOutlineClose } from "react-icons/ai";
+import { AiOutlineSearch, AiOutlineHeart, AiOutlineShoppingCart, } from "react-icons/ai";
 import Link from "next/link";
 import Image from 'next/image';
 import { signOut, useSession } from "next-auth/react";

@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { useCart } from "../../Context/CartContext";
 import Client from "../../../sanity/lib/client";
 import { useParams } from "next/navigation";

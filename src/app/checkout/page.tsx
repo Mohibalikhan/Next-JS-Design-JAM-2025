@@ -47,7 +47,7 @@ export default function CheckoutPage() {
 
   const validateForm = () => {
     let valid = true;
-    let newErrors = { ...errors };
+    const newErrors = { ...errors }; // Changed 'let' to 'const'
 
     if (!formValues.firstName.trim()) {
       newErrors.firstName = "First Name is required.";
