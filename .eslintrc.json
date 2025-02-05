@@ -1,10 +1,8 @@
 {
-  "parserOptions": {
-    "ecmaVersion": "latest",
-    "sourceType": "module"
-  },
+  "extends": ["next/core-web-vitals", "next/typescript"],
   "rules": {
-    "semi": ["error", "always"],
-    "quotes": ["error", "double"]
+    "react/no-unescaped-entities": "off",
+    "@typescript-eslint/no-explicit-any": "warn" // Warn about 'any' usage
+
   }
 }
