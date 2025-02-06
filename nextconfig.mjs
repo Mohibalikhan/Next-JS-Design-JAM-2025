@@ -1,7 +1,11 @@
-export default tseslint.config({
-  rules: {
-    // Note: you must disable the base rule as it can report incorrect errors
-    "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": "error"
-  }
-});
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+   
+};
+
+module.exports = nextConfig;
+module.exports = {
+  experimental: {
+    appDir: true,
+  },
+};
