@@ -75,7 +75,7 @@ const Header = () => {
 
           <div className='flex items-center justify-end gap-4 text-[#0c0303] '>
             <nav className="text-sm md:text-base ">
-              <Link href={'./store'}>Find a Store  | </Link>
+              <Link href={'./store'}>Locate a Store  | </Link>
               <Link href={'./help'}>Help | </Link>
               <Link href={'./join'}>Join Us </Link>
             </nav>
